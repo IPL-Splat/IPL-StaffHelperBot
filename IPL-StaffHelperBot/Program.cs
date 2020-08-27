@@ -21,6 +21,7 @@ namespace IPL_StaffHelperBot
         async Task Init()
         {
             //Cool stuff goes here.
+
         }
     }
 }
