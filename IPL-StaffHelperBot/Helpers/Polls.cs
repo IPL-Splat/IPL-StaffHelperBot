@@ -50,11 +50,11 @@ namespace IPL_StaffHelperBot
             XmlElement root = doc.DocumentElement;
             XmlElement pollElement = doc.CreateElement("poll");
 
-            long experation = DateTimeOffset.Now.ToUnixTimeSeconds() + 604800;
+            long expiration = DateTimeOffset.Now.ToUnixTimeSeconds() + 604800;
 
             pollElement.SetAttribute("messageID", messageID.ToString());
             pollElement.SetAttribute("title", title);
-            pollElement.SetAttribute("experation", experation.ToString());
+            pollElement.SetAttribute("expiration", expiration.ToString());
 
             int index = 1;
             foreach(string option in options)
@@ -164,8 +164,8 @@ namespace IPL_StaffHelperBot
 
             foreach (XmlElement child in root)
             {
-                long childExperationDate = long.Parse(child.GetAttribute("experation")); //don't worry about it
-                if (childExperationDate < time)
+                long childExpirationDate = long.Parse(child.GetAttribute("expiration")); //don't worry about it
+                if (childExpirationDate < time)
                 {
                     root.RemoveChild(child); //yeet the child
                 }
