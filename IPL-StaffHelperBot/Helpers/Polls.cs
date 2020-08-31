@@ -148,7 +148,7 @@ namespace IPL_StaffHelperBot
 
                     int index = int.Parse(option.GetAttribute("index"));
 
-                    builder.AddField($"{numToEmote[index]} {optionName} : {optionVotes} vote{plural}.", $"`{bar}`");
+                    builder.AddField($"{numToEmote[index]} {optionName} : {optionVotes} vote{plural}.", $"{bar}");
                 }
             }
 

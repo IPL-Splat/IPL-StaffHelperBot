@@ -59,6 +59,12 @@ namespace IPL_StaffHelperBot
             string title = args[0];
             string[] options = args.Skip(1).ToArray();
 
+            if(options.Length <= 1)
+            {
+                await ReplyAsync("Polls must have 2 options or more!");
+                return;
+            }
+
             if (options.Length > 9)
             {
                 await ReplyAsync("Polls are limited to 9 options! Reduce the number of options.");
