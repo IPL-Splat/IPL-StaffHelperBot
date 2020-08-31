@@ -85,9 +85,9 @@ namespace IPL_StaffHelperBot
 
             XmlElement element = doc.SelectSingleNode($"/root/poll[@messageID='{reaction.MessageId}']") as XmlElement;
 
-            foreach(XmlElement child in element.ChildNodes)
+            foreach(XmlElement child in element.SelectNodes("user"))
             {
-                if (child.Name == "user" && child.GetAttribute("userID") == reaction.UserId.ToString())
+                if (child.GetAttribute("userID") == reaction.UserId.ToString())
                     return;
             }
 
