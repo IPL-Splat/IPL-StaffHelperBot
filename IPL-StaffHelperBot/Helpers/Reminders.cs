@@ -19,7 +19,7 @@ namespace IPL_StaffHelperBot
             XmlDocument doc = GetDoc();
 
             if (ReminderExists(name))
-                throw new PollNameTakenException();
+                throw new ReminderNameTakenException();
 
             XmlElement root = doc.DocumentElement;
             XmlElement reminderElement = doc.CreateElement("reminder");

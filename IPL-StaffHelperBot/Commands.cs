@@ -151,7 +151,7 @@ namespace IPL_StaffHelperBot
             }
             catch (ReminderDoesNotExistException)
             {
-                await ReplyAsync("Could not find a reminder under that name! Make sure it matches exactly.");
+                await ReplyAsync("Could not find a reminder under that name! Make sure the name matches exactly.");
                 return;
             }
 
