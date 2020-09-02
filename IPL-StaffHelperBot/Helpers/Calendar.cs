@@ -127,6 +127,33 @@ namespace IPL_StaffHelperBot
             if (changeMade) doc.Save(CAL_PATH);
         }
 
+        public static bool CalendarEventExists(int month, int day, string name)
+        {
+            XmlDocument doc = GetDoc();
+
+            foreach(XmlElement child in doc.SelectNodes("/root/event"))
+            {
+                if (int.Parse(child.GetAttribute("month")) == month
+                    && int.Parse(child.GetAttribute("day")) == day
+                    && child.GetAttribute("name") == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void RemoveCalendarEvent(int month, int day, string name)
+        {
+            XmlDocument doc = GetDoc();
+
+            XmlElement element = doc.SelectSingleNode($"/root/event[@name='{name}' and @day='{day}' and @month='{month}']") as XmlElement;
+            doc.DocumentElement.RemoveChild(element);
+
+            doc.Save(CAL_PATH);
+        }
+
         private static string IntToMonth(int month)
         {
             string[] monthStr =

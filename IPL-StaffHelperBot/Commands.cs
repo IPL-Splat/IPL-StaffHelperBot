@@ -200,6 +200,21 @@ namespace IPL_StaffHelperBot
             await ReplyAsync("Channel changed.");
         }
 
+        [Command("calendar remove")]
+        public async Task CalendarRemove(int month, int day, [Remainder]string name)
+        {
+            if (!CalendarHelper.CalendarEventExists(month, day, name))
+            {
+                await ReplyAsync("Calendar event not found! Make sure the month, day, and name are all exactly the same.");
+                return;
+            }
+
+            CalendarHelper.RemoveCalendarEvent(month, day, name);
+            await CalendarHelper.UpdateCalendarMessage(Context.Client);
+
+            await ReplyAsync("Event deleted.");
+        }
+
         #endregion
     }
 }
