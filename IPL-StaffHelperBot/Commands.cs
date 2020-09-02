@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord;
+using System.Security.Cryptography.X509Certificates;
+using Discord.WebSocket;
 
 namespace IPL_StaffHelperBot
 {
@@ -160,6 +162,44 @@ namespace IPL_StaffHelperBot
 
         #endregion
 
+        #region CALENDAR
 
+        [Command("calendar add")]
+        public async Task CalendarAdd(int month, int day, [Remainder]string name) =>
+            await BaseCalendarAdd(month, day, name);
+
+        [Command("calendar add")]
+        public async Task CalendarAdd(int day, [Remainder] string name) =>
+            await BaseCalendarAdd(DateTime.Now.Month, day, name);
+
+        public async Task BaseCalendarAdd(int month, int day, string name)
+        {
+            if (name.Length > 100)
+            {
+                await ReplyAsync("Event message too long! Keep it under 100 characters.");
+                return;
+            }
+
+            CalendarHelper.AddToCalendar(month, day, name);
+            await CalendarHelper.UpdateCalendarMessage(Context.Client);
+            await ReplyAsync("Added to calendar.");
+        }
+
+        [Command("calendar channel"), RequireUserPermission(GuildPermission.ManageChannels)]
+        public async Task CalendarChannel(string name)
+        {
+            var channel = Context.Guild.Channels.FirstOrDefault(n => n.Name == name);
+
+            if (channel is null)
+            {
+                await ReplyAsync("Channel not found! Make sure you typed in the name correctly.");
+                return;
+            }
+
+            CalendarHelper.EditCalendarChannel(channel);
+            await ReplyAsync("Channel changed.");
+        }
+
+        #endregion
     }
 }
