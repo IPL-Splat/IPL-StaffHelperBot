@@ -162,9 +162,9 @@ namespace IPL_StaffHelperBot
             XmlElement root = doc.DocumentElement;
             long time = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            foreach (XmlElement child in root)
+            foreach (XmlElement child in root.SelectNodes("/root/poll"))
             {
-                long childExpirationDate = long.Parse(child.GetAttribute("expiration")); //don't worry about it
+                long childExpirationDate = long.Parse(child.GetAttribute("experation")); //don't worry about it
                 if (childExpirationDate < time)
                 {
                     root.RemoveChild(child); //yeet the child
