@@ -1,4 +1,4 @@
-﻿using Discord.WebSocket;
+using Discord.WebSocket;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
