@@ -53,7 +53,7 @@ namespace IPL_StaffHelperBot
 
             SocketGuildChannel channel = client.GetGuild(guildId).GetTextChannel(textId);
 
-            DateTime dateTime = DateTime.Now.ToUniversalTime();
+            DateTime dateTime = DateTime.UtcNow;
             EmbedBuilder builder = new EmbedBuilder() 
             { 
                 Title = "📆 Calendar (Next 2 weeks)" 
@@ -110,7 +110,7 @@ namespace IPL_StaffHelperBot
         public static void RemoveOldEvents()
         {
             XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.Now.ToUniversalTime();
+            DateTime dateTime = DateTime.UtcNow;
 
             bool changeMade = false;
 
@@ -120,7 +120,7 @@ namespace IPL_StaffHelperBot
                 int month = int.Parse(child.GetAttribute("day"));
                 int year = int.Parse(child.GetAttribute("year"));
 
-                if ((dateTime.Day > day && dateTime.Month == month) 
+                if ((dateTime.Day > day && dateTime.Month == month && dateTime.Year == year) 
                     || (dateTime.Month > month && dateTime.Year == year) 
                     || dateTime.Year > year)
                 {
@@ -135,7 +135,7 @@ namespace IPL_StaffHelperBot
         public static void EnsureCompatibility() //temp code, remove in the future
         {
             XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.Now.ToUniversalTime();
+            DateTime dateTime = DateTime.UtcNow;
 
             foreach (XmlElement child in doc.SelectNodes("/root/event"))
             {

@@ -6,6 +6,7 @@ using Discord;
 using System.Security.Cryptography.X509Certificates;
 using Discord.WebSocket;
 using System.Collections.Generic;
+using System.IO;
 
 namespace IPL_StaffHelperBot
 {
@@ -209,12 +210,15 @@ namespace IPL_StaffHelperBot
                 return;
             }
             DateTime now = DateTime.UtcNow;
-            
-            if (now.Year > year || (now.Month >= month && now.Day > day))
+
+            if ((now.Day > day && now.Month == month && now.Year == year)
+               || (now.Month > month && now.Year == year)
+               || now.Year > year)
             {
-                await ReplyAsync("You can't add an event on a date that's in the past!");
+                await ReplyAsync("You can't create an event at a date that's in the past!");
                 return;
             }
+
 
             CalendarHelper.AddToCalendar(month, day, year, name);
             await CalendarHelper.UpdateCalendarMessage(Context.Client);

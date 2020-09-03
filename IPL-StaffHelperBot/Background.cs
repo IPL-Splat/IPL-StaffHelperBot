@@ -22,14 +22,14 @@ namespace IPL_StaffHelperBot
             {
                 await ReminderHelper.ScanForNewReminders(client);
 
-                if (storedDay != DateTime.Now.ToUniversalTime().Day) //if it is a new day
+                if (storedDay != DateTime.UtcNow.Day) //if it is a new day
                 {
                     PollHelper.ScanForOldPolls();
 
                     await CalendarHelper.UpdateCalendarMessage(client);
                     CalendarHelper.RemoveOldEvents();
 
-                    storedDay = DateTime.Now.ToUniversalTime().Day;
+                    storedDay = DateTime.UtcNow.Day;
                 }
 
                 await Task.Delay(60000); //every minute
