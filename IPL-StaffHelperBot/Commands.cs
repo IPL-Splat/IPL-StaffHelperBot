@@ -209,6 +209,13 @@ namespace IPL_StaffHelperBot
                 await ReplyAsync("Event message too long! Keep it under 100 characters.");
                 return;
             }
+
+            if(day > DateTime.DaysInMonth(year, month))
+            {
+                await ReplyAsync("Invalid date!");
+                return;
+            }
+
             DateTime now = DateTime.UtcNow;
 
             if ((now.Day > day && now.Month == month && now.Year == year)
