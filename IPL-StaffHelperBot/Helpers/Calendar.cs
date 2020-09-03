@@ -59,7 +59,7 @@ namespace IPL_StaffHelperBot
                 Title = "📆 Calendar (Next 2 weeks)" 
             };
 
-            for (int i = 0; i < 130; i++) 
+            for (int i = 0; i < 14; i++) 
             {
                 string title = $"{IntToMonth(dateTime.Month)} {dateTime.Day}";
 

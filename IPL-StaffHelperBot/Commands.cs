@@ -209,7 +209,8 @@ namespace IPL_StaffHelperBot
                 return;
             }
             DateTime now = DateTime.UtcNow;
-            if (now.Year >= year && now.Month >= month && now.Day > day)
+            
+            if (now.Year > year || (now.Month >= month && now.Day > day))
             {
                 await ReplyAsync("You can't add an event on a date that's in the past!");
                 return;
@@ -240,7 +241,7 @@ namespace IPL_StaffHelperBot
         {
             if (!CalendarHelper.CalendarEventExists(month, day, year, name))
             {
-                await ReplyAsync("Calendar event not found! Make sure the month, day, and name are all exactly the same.");
+                await ReplyAsync("Calendar event not found! Make sure the month, day, year, and name are all exactly the same.");
                 return;
             }
 
