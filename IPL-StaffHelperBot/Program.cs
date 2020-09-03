@@ -26,6 +26,8 @@ namespace IPL_StaffHelperBot
 
         async Task Init()
         {
+            CalendarHelper.EnsureCompatibility(); //temp code, remove in the future
+
             if (!File.Exists(TOKEN_PATH))
             {
                 Console.WriteLine("Enter token: ");

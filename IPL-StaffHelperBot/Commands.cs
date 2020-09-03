@@ -186,7 +186,7 @@ namespace IPL_StaffHelperBot
         [Command("calendar")]
         public async Task Calendar() =>
             await ReplyAsync("To use the calendar, use the following commands: " + "\n" +
-                "`calendar add [num month] (num day) (name)`" + "\n" +
+                "`calendar add [num month] (num day) [num year] (name)`" + "\n" +
                 "`calendar remove (month) (day) (name)`");
 
         [Command("calendar add")]

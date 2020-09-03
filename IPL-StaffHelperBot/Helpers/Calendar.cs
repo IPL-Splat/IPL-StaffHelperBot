@@ -110,17 +110,19 @@ namespace IPL_StaffHelperBot
         public static void RemoveOldEvents()
         {
             XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.Now.ToUniversalTime().AddDays(-1);
+            DateTime dateTime = DateTime.Now.ToUniversalTime();
 
             bool changeMade = false;
 
             foreach (XmlElement child in doc.SelectNodes("/root/event"))
             {
-                string day = dateTime.Day.ToString();
-                string month = dateTime.Month.ToString();
-                string year = dateTime.Year.ToString();
+                int day = int.Parse(child.GetAttribute("month"));
+                int month = int.Parse(child.GetAttribute("day"));
+                int year = int.Parse(child.GetAttribute("year"));
 
-                if (child.GetAttribute("month") == month && child.GetAttribute("day") == day && child.GetAttribute("year") == year)
+                if ((dateTime.Day > day && dateTime.Month == month) 
+                    || (dateTime.Month > month && dateTime.Year == year) 
+                    || dateTime.Year > year)
                 {
                     doc.DocumentElement.RemoveChild(child);
                     changeMade = true;
@@ -128,6 +130,20 @@ namespace IPL_StaffHelperBot
             }
 
             if (changeMade) doc.Save(CAL_PATH);
+        }
+
+        public static void EnsureCompatibility() //temp code, remove in the future
+        {
+            XmlDocument doc = GetDoc();
+            DateTime dateTime = DateTime.Now.ToUniversalTime();
+
+            foreach (XmlElement child in doc.SelectNodes("/root/event"))
+            {
+                if (!child.HasAttribute("year"))
+                    child.SetAttribute("year", dateTime.Year.ToString());
+            }
+
+            doc.Save(CAL_PATH);
         }
 
         public static bool CalendarEventExists(int month, int day, int year, string name)
