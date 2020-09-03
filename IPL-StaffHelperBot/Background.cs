@@ -20,15 +20,13 @@ namespace IPL_StaffHelperBot
         {
             do
             {
+                PollHelper.ScanForOldPolls();
                 await ReminderHelper.ScanForNewReminders(client);
-
-                if (storedDay != DateTime.Now.ToUniversalTime().Day) //if it is a new day
+                if (storedDay != DateTime.Now.Day)
                 {
-                    PollHelper.ScanForOldPolls();
-
                     await CalendarHelper.UpdateCalendarMessage(client);
                     CalendarHelper.RemoveOldEvents();
-                    storedDay = DateTime.Now.ToUniversalTime().Day;
+                    storedDay = DateTime.Now.Day;
                 }
 
                 await Task.Delay(60000); //every minute
