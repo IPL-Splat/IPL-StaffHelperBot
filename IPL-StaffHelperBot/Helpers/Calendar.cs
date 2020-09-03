@@ -118,8 +118,9 @@ namespace IPL_StaffHelperBot
             {
                 string day = dateTime.Day.ToString();
                 string month = dateTime.Month.ToString();
+                string year = dateTime.Year.ToString();
 
-                if (child.GetAttribute("month") == month && child.GetAttribute("day") == day)
+                if (child.GetAttribute("month") == month && child.GetAttribute("day") == day && child.GetAttribute("year") == year)
                 {
                     doc.DocumentElement.RemoveChild(child);
                     changeMade = true;
