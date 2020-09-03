@@ -204,6 +204,12 @@ namespace IPL_StaffHelperBot
                 await ReplyAsync("Event message too long! Keep it under 100 characters.");
                 return;
             }
+            DateTime now = DateTime.UtcNow;
+            if (now.Month > month && now.Day > day)
+            {
+                await ReplyAsync("You can't add an event on a date that's in the past!");
+                return;
+            }
 
             CalendarHelper.AddToCalendar(month, day, name);
             await CalendarHelper.UpdateCalendarMessage(Context.Client);
