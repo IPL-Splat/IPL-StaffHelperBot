@@ -52,7 +52,7 @@ namespace IPL_StaffHelperBot
 
             SocketGuildChannel channel = client.GetGuild(guildId).GetTextChannel(textId);
 
-            DateTime dateTime = DateTime.Now;
+            DateTime dateTime = DateTime.Now.ToUniversalTime();
             EmbedBuilder builder = new EmbedBuilder() 
             { 
                 Title = "📆 Calendar (Next 2 weeks)" 
@@ -108,7 +108,7 @@ namespace IPL_StaffHelperBot
         public static void RemoveOldEvents()
         {
             XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.Now.AddDays(-1);
+            DateTime dateTime = DateTime.Now.ToUniversalTime().AddDays(-1);
 
             bool changeMade = false;
 
