@@ -86,7 +86,12 @@ namespace IPL_StaffHelperBot
             if (message.HasMentionPrefix(client.CurrentUser, ref argPos))
             {
                 var context = new SocketCommandContext(client, message);
-                await commands.ExecuteAsync(context, argPos, null);
+                var result = await commands.ExecuteAsync(context, argPos, null);
+
+                if (!result.IsSuccess)
+                {
+                    await message.Channel.SendMessageAsync($"Error: `{result.ErrorReason}`");
+                }
             }
         }
     }

@@ -28,6 +28,7 @@ namespace IPL_StaffHelperBot
 
                     await CalendarHelper.UpdateCalendarMessage(client);
                     CalendarHelper.RemoveOldEvents();
+
                     storedDay = DateTime.Now.ToUniversalTime().Day;
                 }
 
