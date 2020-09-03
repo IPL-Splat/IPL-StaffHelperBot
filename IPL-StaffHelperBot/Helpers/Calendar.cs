@@ -15,7 +15,7 @@ namespace IPL_StaffHelperBot
     {
         const string CAL_PATH = "calendar.xml";
 
-        public static void AddToCalendar(int month, int day, string name)
+        public static void AddToCalendar(int month, int day, int year, string name)
         {
             XmlDocument doc = GetDoc();
             XmlElement root = doc.DocumentElement;
@@ -24,6 +24,7 @@ namespace IPL_StaffHelperBot
             eventElement.SetAttribute("name", name);
             eventElement.SetAttribute("month", month.ToString());
             eventElement.SetAttribute("day", day.ToString());
+            eventElement.SetAttribute("year", year.ToString());
 
             root.AppendChild(eventElement);
             doc.Save(CAL_PATH);
@@ -52,7 +53,7 @@ namespace IPL_StaffHelperBot
 
             SocketGuildChannel channel = client.GetGuild(guildId).GetTextChannel(textId);
 
-            DateTime dateTime = DateTime.Now;
+            DateTime dateTime = DateTime.Now.ToUniversalTime();
             EmbedBuilder builder = new EmbedBuilder() 
             { 
                 Title = "📆 Calendar (Next 2 weeks)" 
@@ -73,12 +74,13 @@ namespace IPL_StaffHelperBot
 
                 string day = dateTime.Day.ToString();
                 string month = dateTime.Month.ToString();
+                string year = dateTime.Year.ToString();
 
                 string events = "";
 
                 foreach (XmlElement element in doc.SelectNodes($"/root/event"))
                 {
-                    if (element.GetAttribute("day") == day && element.GetAttribute("month") == month)
+                    if (element.GetAttribute("day") == day && element.GetAttribute("month") == month && element.GetAttribute("year") == year)
                     {
                         if (events != "")
                             events += "\n";
@@ -108,7 +110,7 @@ namespace IPL_StaffHelperBot
         public static void RemoveOldEvents()
         {
             XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.Now.AddDays(-1);
+            DateTime dateTime = DateTime.Now.ToUniversalTime().AddDays(-1);
 
             bool changeMade = false;
 
@@ -116,8 +118,9 @@ namespace IPL_StaffHelperBot
             {
                 string day = dateTime.Day.ToString();
                 string month = dateTime.Month.ToString();
+                string year = dateTime.Year.ToString();
 
-                if (child.GetAttribute("month") == month && child.GetAttribute("day") == day)
+                if (child.GetAttribute("month") == month && child.GetAttribute("day") == day && child.GetAttribute("year") == year)
                 {
                     doc.DocumentElement.RemoveChild(child);
                     changeMade = true;
@@ -127,7 +130,7 @@ namespace IPL_StaffHelperBot
             if (changeMade) doc.Save(CAL_PATH);
         }
 
-        public static bool CalendarEventExists(int month, int day, string name)
+        public static bool CalendarEventExists(int month, int day, int year, string name)
         {
             XmlDocument doc = GetDoc();
 
@@ -135,6 +138,7 @@ namespace IPL_StaffHelperBot
             {
                 if (int.Parse(child.GetAttribute("month")) == month
                     && int.Parse(child.GetAttribute("day")) == day
+                    && int.Parse(child.GetAttribute("year")) == year
                     && child.GetAttribute("name") == name)
                 {
                     return true;
@@ -144,11 +148,11 @@ namespace IPL_StaffHelperBot
             return false;
         }
 
-        public static void RemoveCalendarEvent(int month, int day, string name)
+        public static void RemoveCalendarEvent(int month, int day, int year, string name)
         {
             XmlDocument doc = GetDoc();
 
-            XmlElement element = doc.SelectSingleNode($"/root/event[@name='{name}' and @day='{day}' and @month='{month}']") as XmlElement;
+            XmlElement element = doc.SelectSingleNode($"/root/event[@name='{name}' and @day='{day}' and @month='{month}' and @year='{year}']") as XmlElement;
             doc.DocumentElement.RemoveChild(element);
 
             doc.Save(CAL_PATH);
