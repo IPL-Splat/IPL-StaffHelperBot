@@ -5,6 +5,7 @@ using Discord.Commands;
 using Discord;
 using System.Security.Cryptography.X509Certificates;
 using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace IPL_StaffHelperBot
 {
@@ -22,6 +23,24 @@ namespace IPL_StaffHelperBot
          * }
          */
 
+        [Command("help")]
+        public async Task Help()
+        {
+            string commands =
+                "`[] = Optional   () = Required`" + "\n\n" +
+                "**Roll the dice:**" + "\n" +
+                "`rtd [dice size]`" + "\n" +
+                "**Create a poll:**" + "\n" +
+                "`poll (title), (option 1), (option 2)` Up to 9 options seperated by commas." + "\n" +
+                "**Interact with reminders:**" + "\n" +
+                "`reminder create [num days] [num hours] (num minutes) (name)`" + "\n" +
+                "`reminder remove (name)`" + "\n" +
+                "**Use the Calendar**" + "\n" +
+                "`calendar add [num month] (num day) (name)`" + "\n" +
+                "`calendar remove (month) (day) (name)`";
+
+            await ReplyAsync(commands);
+        }
 
         #region RTD
 
