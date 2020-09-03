@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord;
 using System.Security.Cryptography.X509Certificates;
 using Discord.WebSocket;
+using System.Collections.Generic;
+using System.IO;
 
 namespace IPL_StaffHelperBot
 {
@@ -22,6 +24,24 @@ namespace IPL_StaffHelperBot
          * }
          */
 
+        [Command("help")]
+        public async Task Help()
+        {
+            string commands =
+                "`[] = Optional   () = Required`" + "\n\n" +
+                "**Roll the dice:**" + "\n" +
+                "`rtd [dice size]`" + "\n" +
+                "**Create a poll:**" + "\n" +
+                "`poll (title), (option 1), (option 2)` Up to 9 options seperated by commas." + "\n" +
+                "**Interact with reminders:**" + "\n" +
+                "`reminder create [num days] [num hours] (num minutes) (name)`" + "\n" +
+                "`reminder remove (name)`" + "\n" +
+                "**Use the Calendar**" + "\n" +
+                "`calendar add [num month] (num day) [num year] (name)`" + "\n" +
+                "`calendar remove (month) (day) (num year) (name)`";
+
+            await ReplyAsync(commands);
+        }
 
         #region RTD
 
@@ -164,15 +184,25 @@ namespace IPL_StaffHelperBot
 
         #region CALENDAR
 
+        [Command("calendar")]
+        public async Task Calendar() =>
+            await ReplyAsync("To use the calendar, use the following commands: " + "\n" +
+                "`calendar add [num month] (num day) [num year] (name)`" + "\n" +
+                "`calendar remove (month) (day) (name)`");
+
+        [Command("calendar add")]
+        public async Task CalendarAdd(int month, int day, int year, [Remainder] string name) =>
+            await BaseCalendarAdd(month, day, year, name);
+
         [Command("calendar add")]
         public async Task CalendarAdd(int month, int day, [Remainder]string name) =>
-            await BaseCalendarAdd(month, day, name);
+            await BaseCalendarAdd(month, day, DateTime.UtcNow.Year, name);
 
         [Command("calendar add")]
         public async Task CalendarAdd(int day, [Remainder] string name) =>
-            await BaseCalendarAdd(DateTime.Now.Month, day, name);
+            await BaseCalendarAdd(DateTime.UtcNow.Month, day, DateTime.UtcNow.Year, name);
 
-        public async Task BaseCalendarAdd(int month, int day, string name)
+        public async Task BaseCalendarAdd(int month, int day, int year, string name)
         {
             if (name.Length > 100)
             {
@@ -180,7 +210,24 @@ namespace IPL_StaffHelperBot
                 return;
             }
 
-            CalendarHelper.AddToCalendar(month, day, name);
+            if(day > DateTime.DaysInMonth(year, month))
+            {
+                await ReplyAsync("Invalid date!");
+                return;
+            }
+
+            DateTime now = DateTime.UtcNow;
+
+            if ((now.Day > day && now.Month == month && now.Year == year)
+               || (now.Month > month && now.Year == year)
+               || now.Year > year)
+            {
+                await ReplyAsync("You can't create an event at a date that's in the past!");
+                return;
+            }
+
+
+            CalendarHelper.AddToCalendar(month, day, year, name);
             await CalendarHelper.UpdateCalendarMessage(Context.Client);
             await ReplyAsync("Added to calendar.");
         }
@@ -201,15 +248,15 @@ namespace IPL_StaffHelperBot
         }
 
         [Command("calendar remove")]
-        public async Task CalendarRemove(int month, int day, [Remainder]string name)
+        public async Task CalendarRemove(int month, int day, int year,[Remainder]string name)
         {
-            if (!CalendarHelper.CalendarEventExists(month, day, name))
+            if (!CalendarHelper.CalendarEventExists(month, day, year, name))
             {
-                await ReplyAsync("Calendar event not found! Make sure the month, day, and name are all exactly the same.");
+                await ReplyAsync("Calendar event not found! Make sure the month, day, year, and name are all exactly the same.");
                 return;
             }
 
-            CalendarHelper.RemoveCalendarEvent(month, day, name);
+            CalendarHelper.RemoveCalendarEvent(month, day, year, name);
             await CalendarHelper.UpdateCalendarMessage(Context.Client);
 
             await ReplyAsync("Event deleted.");

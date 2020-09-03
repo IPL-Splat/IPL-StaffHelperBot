@@ -6,6 +6,7 @@ A discord bot with functions to assist IPL staff.
 * Live polls.
 * Timed reminders.
 * Random number gen.
+* Calendar
 * More added as we need them.
 
 

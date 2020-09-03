@@ -1,4 +1,4 @@
-﻿using Discord.WebSocket;
+using Discord.WebSocket;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -20,13 +20,16 @@ namespace IPL_StaffHelperBot
         {
             do
             {
-                PollHelper.ScanForOldPolls();
                 await ReminderHelper.ScanForNewReminders(client);
-                if (storedDay != DateTime.Now.Day)
+
+                if (storedDay != DateTime.UtcNow.Day) //if it is a new day
                 {
+                    PollHelper.ScanForOldPolls();
+
                     await CalendarHelper.UpdateCalendarMessage(client);
                     CalendarHelper.RemoveOldEvents();
-                    storedDay = DateTime.Now.Day;
+
+                    storedDay = DateTime.UtcNow.Day;
                 }
 
                 await Task.Delay(60000); //every minute
