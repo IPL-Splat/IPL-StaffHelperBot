@@ -24,9 +24,8 @@ namespace IPL_StaffHelperBot
 
         const string TOKEN_PATH = "token.txt";
 
-        async Task Init()
+        async Task Init() 
         {
-            CalendarHelper.EnsureCompatibility(); //temp code, remove in the future
 
             if (!File.Exists(TOKEN_PATH))
             {

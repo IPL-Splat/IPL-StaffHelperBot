@@ -54,10 +54,12 @@ namespace IPL_StaffHelperBot
             SocketGuildChannel channel = client.GetGuild(guildId).GetTextChannel(textId);
 
             DateTime dateTime = DateTime.UtcNow;
-            EmbedBuilder builder = new EmbedBuilder() 
-            { 
-                Title = "📆 Calendar (Next 2 weeks)" 
+            EmbedBuilder builder = new EmbedBuilder()
+            {
+                Title = "📆 Calendar (Next 2 weeks)"
             };
+
+            builder.WithFooter($"Message last updated {DateTime.UtcNow.ToString("M/dd h:mm tt")} UTC.");
 
             for (int i = 0; i < 14; i++) 
             {
@@ -130,20 +132,6 @@ namespace IPL_StaffHelperBot
             }
 
             if (changeMade) doc.Save(CAL_PATH);
-        }
-
-        public static void EnsureCompatibility() //temp code, remove in the future
-        {
-            XmlDocument doc = GetDoc();
-            DateTime dateTime = DateTime.UtcNow;
-
-            foreach (XmlElement child in doc.SelectNodes("/root/event"))
-            {
-                if (!child.HasAttribute("year"))
-                    child.SetAttribute("year", dateTime.Year.ToString());
-            }
-
-            doc.Save(CAL_PATH);
         }
 
         public static bool CalendarEventExists(int month, int day, int year, string name)

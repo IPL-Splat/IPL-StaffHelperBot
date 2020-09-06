@@ -8,7 +8,7 @@ namespace IPL_StaffHelperBot
     public class Background
     {
         private DiscordSocketClient client;
-        int storedDay = 0;
+        bool firstRun = true;
 
         public Background(DiscordSocketClient client)
         {
@@ -22,14 +22,14 @@ namespace IPL_StaffHelperBot
             {
                 await ReminderHelper.ScanForNewReminders(client);
 
-                if (storedDay != DateTime.UtcNow.Day) //if it is a new day
+                if ((DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute < 1) || firstRun) //if it is a new day
                 {
                     PollHelper.ScanForOldPolls();
 
                     await CalendarHelper.UpdateCalendarMessage(client);
                     CalendarHelper.RemoveOldEvents();
 
-                    storedDay = DateTime.UtcNow.Day;
+                    firstRun = false;
                 }
 
                 await Task.Delay(60000); //every minute
