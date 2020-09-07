@@ -53,9 +53,7 @@ namespace IPL_StaffHelperBot
 
             while (!clientLoggedIn) { }
 
-            Background bg = new Background(client);
-
-            await Task.Delay(-1);
+            Background bg = new Background(client); //program loops through this.
         }
 
         private Task ClientReady()

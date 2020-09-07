@@ -13,7 +13,7 @@ namespace IPL_StaffHelperBot
         public Background(DiscordSocketClient client)
         {
             this.client = client;
-            Task.Run(Loop);
+            Loop().GetAwaiter().GetResult();
         }
 
         async Task Loop()
