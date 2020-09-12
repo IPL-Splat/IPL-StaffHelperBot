@@ -164,10 +164,17 @@ namespace IPL_StaffHelperBot
 
             foreach (XmlElement child in root.SelectNodes("/root/poll"))
             {
-                long childExpirationDate = long.Parse(child.GetAttribute("experation")); //don't worry about it
-                if (childExpirationDate < time)
+                if (long.TryParse(child.GetAttribute("experation"), out long childExpirationDate))
                 {
-                    root.RemoveChild(child); //yeet the child
+                    if (childExpirationDate < time)
+                    {
+                        root.RemoveChild(child); //yeet the child
+                    }
+                } 
+                else
+                {
+                    Console.WriteLine($"Node '{child.GetAttribute("name")}' " +
+                        $"experation({child.GetAttribute("experation")}) failed to parse.");
                 }
             }
 
